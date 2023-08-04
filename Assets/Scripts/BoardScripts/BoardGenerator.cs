@@ -1,39 +1,38 @@
 using System;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
-using Random = UnityEngine.Random;
-
 
 public class BoardGenerator : Singleton<BoardGenerator>
 {
+    public Ease Ease = Ease.Linear;
+
+    public float Speed = 50f;
+
     private BoardController _boardController;
-    
-    public List<Tile> TilePrefabs;
-
-    public int M;
-
-    public int N;
 
     public Grid[,] Grids;
 
-    private float _xdiff;
+    public bool CanClick = true;
 
-    private float _ydiff;
+    private float _tileWidth;
+
+    private float _tileHeight;
 
     public Action<Grid[,]> OnGridPositionsChanged;
     public Action<Grid[,]> OnGridInitialized;
-    private void Awake()
+
+    public void CreateBoard(LevelSettings levelSettings)
     {
-        _xdiff = TilePrefabs[0].X;
-        _ydiff = TilePrefabs[0].Y;
+        _tileWidth = TileProvider.Instance.GetTileWidth();
+        _tileHeight = TileProvider.Instance.GetTileHeight();
 
-        Grids = new Grid[N, M];
+        Grids = new Grid[levelSettings.LevelColumnCount, levelSettings.LevelRowCount];
 
-        for (int i = 0; i < M; i++)
+        for (int i = 0; i < levelSettings.LevelRowCount; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < levelSettings.LevelColumnCount; j++)
             {
-                Vector2 gridPosition = new Vector2(j * _ydiff, i * _xdiff);
+                Vector2 gridPosition = new Vector2(j * _tileHeight, i * _tileWidth);
 
                 //Grid Generation
 
@@ -46,36 +45,36 @@ public class BoardGenerator : Singleton<BoardGenerator>
                 AddTile(j, i);
             }
         }
-        
+
         OnGridInitialized?.Invoke(Grids);
-    }
-
-    private GameObject GetRandomTile()
-    {
-        int random = Random.Range(0, TilePrefabs.Count);
-
-        GameObject go = Instantiate(TilePrefabs[random].gameObject, transform);
-
-        return go;
     }
 
     private void AddTile(int column, int row, bool isNew = false)
     {
-        GameObject go = GetRandomTile();
+        GameObject go = TileProvider.Instance.GetRandomTile();
 
         Grids[column, row].Tile = go.GetComponent<Tile>();
 
-        go.transform.position = Grids[column, row].Position;
-
         if (isNew)
         {
+            CanClick = false;
+
+            go.transform.position = Grids[column, row].Position + 40 * Vector2.up;
+
+            go.transform.DOMove(Grids[column, row].Position, Speed).SetSpeedBased(true).SetEase(Ease).OnComplete(() =>
+            {
+                CanClick = true;
+            });
+
             go.name = string.Format("Tile : {0} , {1} + [NEW]", column.ToString(), row.ToString());
         }
         else
         {
+            go.transform.position = Grids[column, row].Position;
+
             go.name = string.Format("Tile : {0} , {1}", column.ToString(), row.ToString());
         }
-        
+
         go.GetComponent<Tile>().Init(column, row);
     }
 
@@ -85,10 +84,10 @@ public class BoardGenerator : Singleton<BoardGenerator>
         {
             if (grid.Tile == null)
             {
-                AddTile(grid.Column,grid.Row,true);
+                AddTile(grid.Column, grid.Row, true);
             }
         }
-        
+
         OnGridPositionsChanged?.Invoke(Grids);
     }
 

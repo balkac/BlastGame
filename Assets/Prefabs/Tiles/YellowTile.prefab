@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3893533641381398099
+--- !u!1001 &3381173948788021681
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,34 +10,34 @@ PrefabInstance:
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: Sprite1
       value: 
-      objectReference: {fileID: 21300000, guid: bc91f8dfe67484ad3aceb3a6849ab33e, type: 3}
+      objectReference: {fileID: 21300000, guid: 73f9d192422c743468e381eed8863093, type: 3}
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: Sprite2
       value: 
-      objectReference: {fileID: 21300000, guid: e8fb93aa5bd8c4d76b3fe03dcda8f4f1, type: 3}
+      objectReference: {fileID: 21300000, guid: 87207dcbe77e142068836c3024321ab5, type: 3}
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: TileType
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: FirstIcon
       value: 
-      objectReference: {fileID: 21300000, guid: 1ca6633a5d1474779a4b631428def53f, type: 3}
+      objectReference: {fileID: 21300000, guid: e0b52acc1b6214916a703c5b7429ad00, type: 3}
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: ThirdIcon
       value: 
-      objectReference: {fileID: 21300000, guid: e8fb93aa5bd8c4d76b3fe03dcda8f4f1, type: 3}
+      objectReference: {fileID: 21300000, guid: 7b8f70d6d95c8461dbd0db3e43fc21a6, type: 3}
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: SecondIcon
       value: 
-      objectReference: {fileID: 21300000, guid: bc91f8dfe67484ad3aceb3a6849ab33e, type: 3}
+      objectReference: {fileID: 21300000, guid: e7111b50220c34d68a5aa60dee2ade5b, type: 3}
     - target: {fileID: 4800304404726498121, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 882bd1abbf4df4ee9b5b680d61dfc90b, type: 3}
+      objectReference: {fileID: 21300000, guid: af28a90cbd3354e1cb229e06b6d0d053, type: 3}
     - target: {fileID: 4800304404726498122, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: m_Name
-      value: GreenTile
+      value: YellowTile
       objectReference: {fileID: 0}
     - target: {fileID: 4800304404726498126, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: m_RootOrder

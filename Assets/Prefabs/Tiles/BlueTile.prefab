@@ -19,6 +19,22 @@ PrefabInstance:
       propertyPath: TileType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: FirstIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: c3537d19a5fa04339b1d6ea97d311c9e, type: 3}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: ThirdIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c6de890e78e845098f0205e3535222d, type: 3}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: SecondIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 956562f6535ae4c2da6a0882049f3542, type: 3}
+    - target: {fileID: 4800304404726498121, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 807dc31433a17498a947cbc1af18fe43, type: 3}
     - target: {fileID: 4800304404726498122, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: m_Name
       value: BlueTile

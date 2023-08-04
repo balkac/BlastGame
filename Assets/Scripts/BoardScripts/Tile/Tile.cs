@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -9,24 +8,29 @@ public class Tile : MonoBehaviour
 {
     public ETile TileType = ETile.None;
 
-    public Sprite Sprite1;
-    public Sprite Sprite2;
-    private Sprite _defaultSprite = null;
-    public float X => GetComponent<BoxCollider>().size.x;
-    public float Y => GetComponent<BoxCollider>().size.y;
+    public Sprite FirstIcon;
 
-    [FormerlySerializedAs("_row")] public int Row;
-    [FormerlySerializedAs("_column")] public int Column;
+    public Sprite SecondIcon;
+
+    public Sprite ThirdIcon;
+
+    private Sprite _defaultSprite = null;
+    public float Width => GetComponent<BoxCollider>().size.x;
+    public float Height => GetComponent<BoxCollider>().size.y;
+
+    public int Row;
+
+    public int Column;
 
     public Tile Left => Column - 1 >= 0
         ? BoardGenerator.Instance.Grids[Column - 1, Row].Tile
         : null;
 
-    public Tile Right => Column + 1 < BoardGenerator.Instance.N
+    public Tile Right => Column + 1 < LevelProvider.Instance.LevelSettings.LevelColumnCount
         ? BoardGenerator.Instance.Grids[Column + 1, Row].Tile
         : null;
 
-    public Tile Top => Row + 1 < BoardGenerator.Instance.M
+    public Tile Top => Row + 1 < LevelProvider.Instance.LevelSettings.LevelRowCount
         ? BoardGenerator.Instance.Grids[Column, Row + 1].Tile
         : null;
 
@@ -54,39 +58,49 @@ public class Tile : MonoBehaviour
         BoardGenerator.Instance.Grids[Column, Row].Tile = null;
 
         Row -= 1;
-        
-        transform.DOMoveY(BoardGenerator.Instance.Grids[Column, Row].Position.y, 0.1f);
+
+
+        transform.DOMoveY(BoardGenerator.Instance.Grids[Column, Row].Position.y, 40f).SetSpeedBased(true);
 
         BoardGenerator.Instance.Grids[Column, Row].Tile = this;
 
-        if (Bottom == null && Row !=0)
+        if (Bottom == null && Row != 0)
         {
             MoveBottom();
         }
     }
 
-    public void ChangeGrid(int column,int row, Vector2 position)
+    public void ChangeGrid(int column, int row, Vector2 position)
     {
         Column = column;
-        
+
         Row = row;
-        
+
         transform.DOMove(position, 1f);
-        
+
         gameObject.name = string.Format("Tile : {0} , {1} + [SHUFFLE]", column.ToString(), row.ToString());
     }
+
     private void Destroy()
     {
         BoardGenerator.Instance.Grids[Column, Row].Tile = null;
-        
+
         Destroy(this.gameObject);
     }
 
     private void OnMouseDown()
     {
+        if (!BoardGenerator.Instance.CanClick)
+            return;
+
         Debug.Log("Clicked on Tile " + Column + "," + Row);
 
         List<Tile> connectedTiles = GetConnectedTiles();
+
+        if (connectedTiles.Count < 2)
+        {
+            return;
+        }
 
         foreach (Tile tile in connectedTiles)
         {
@@ -96,14 +110,6 @@ public class Tile : MonoBehaviour
         BoardGenerator.Instance.MoveTiles();
         BoardGenerator.Instance.AddNewTiles();
     }
-
-    // private void Update()
-    // {
-    //     if (Bottom == null && Row != 0)
-    //     {
-    //         MoveBottom();
-    //     }
-    // }
 
     public List<Tile> GetConnectedTiles(List<Tile> tiles = null)
     {
@@ -133,18 +139,23 @@ public class Tile : MonoBehaviour
 
     public void ChangeSprite(int connectedCount)
     {
-        if (connectedCount >2 && connectedCount <5)
+        if (connectedCount >= LevelProvider.Instance.LevelSettings.VisualCondition.FirstSpriteConditionCount
+            && connectedCount < LevelProvider.Instance.LevelSettings.VisualCondition.SecondSpriteConditionCount)
         {
-            GetComponent<SpriteRenderer>().sprite = Sprite1;
-            return;
+            GetComponent<SpriteRenderer>().sprite = FirstIcon;
         }
-
-        if (connectedCount >= 5)
+        else if (connectedCount >= LevelProvider.Instance.LevelSettings.VisualCondition.SecondSpriteConditionCount
+                 && connectedCount < LevelProvider.Instance.LevelSettings.VisualCondition.ThirdSpiteConditionCount)
         {
-            GetComponent<SpriteRenderer>().sprite = Sprite2;
-            return;
+            GetComponent<SpriteRenderer>().sprite = SecondIcon;
         }
-        
-        GetComponent<SpriteRenderer>().sprite = _defaultSprite;
+        else if (connectedCount >= LevelProvider.Instance.LevelSettings.VisualCondition.ThirdSpiteConditionCount)
+        {
+            GetComponent<SpriteRenderer>().sprite = ThirdIcon;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = _defaultSprite;
+        }
     }
 }
