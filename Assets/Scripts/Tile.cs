@@ -65,6 +65,16 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void ChangeGrid(int column,int row, Vector2 position)
+    {
+        Column = column;
+        
+        Row = row;
+        
+        transform.DOMove(position, 1f);
+        
+        gameObject.name = string.Format("Tile : {0} , {1} + [SHUFFLE]", column.ToString(), row.ToString());
+    }
     private void Destroy()
     {
         BoardGenerator.Instance.Grids[Column, Row].Tile = null;
