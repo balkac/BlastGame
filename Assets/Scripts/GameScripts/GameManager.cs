@@ -17,6 +17,6 @@ public class GameManager : Singleton<GameManager>
 
     private void StartGame(LevelSettings levelSettings)
     {
-        BoardGenerator.Instance.CreateBoard(levelSettings);
+        BoardController.Instance.CreateBoard(levelSettings);
     }
 }

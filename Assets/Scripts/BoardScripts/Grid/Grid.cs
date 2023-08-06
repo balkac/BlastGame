@@ -8,13 +8,8 @@ public class Grid
         Row = row;
         Position = pos;
     }
-
-    public int Row;
-
-    public int Column;
-
-    public Vector2 Position;
-
-    public Tile Tile = null;
-    
+    public int Row { get; private set; }
+    public int Column { get; private set; }
+    public Vector2 Position { get; private set; }
+    public Tile Tile { get; set; }
 }

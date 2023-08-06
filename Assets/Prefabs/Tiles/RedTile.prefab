@@ -28,7 +28,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 27f365a1f66ff49c1bd42c2dc95676f9, type: 3}
     - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: _tileType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
       propertyPath: SecondIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 6aa739893961847b99f3dc8274497075, type: 3}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: _firstIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: ddc783d7698ef4628a8152179d208660, type: 3}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: _thirdIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 27f365a1f66ff49c1bd42c2dc95676f9, type: 3}
+    - target: {fileID: 4800304404726498120, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}
+      propertyPath: _secondIcon
       value: 
       objectReference: {fileID: 21300000, guid: 6aa739893961847b99f3dc8274497075, type: 3}
     - target: {fileID: 4800304404726498121, guid: dc280a2ad9e2448d392415e9a2e5df41, type: 3}

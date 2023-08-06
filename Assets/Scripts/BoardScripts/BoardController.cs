@@ -1,103 +1,74 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class BoardController : MonoBehaviour
+public class BoardController : Singleton<BoardController>
 {
-    private void Awake()
-    {
-        BoardGenerator.Instance.OnGridPositionsChanged += OnGridPositionsChanged;
-        BoardGenerator.Instance.OnGridInitialized += OnGridInitialized;
-    }
+    private float _tileWidth;
 
-    private void OnDestroy()
-    {
-        BoardGenerator.Instance.OnGridPositionsChanged -= OnGridPositionsChanged;
-        BoardGenerator.Instance.OnGridInitialized -= OnGridInitialized;
-    }
+    private float _tileHeight;
+    public Grid[,] Grids { private set; get; }
 
-    private void OnGridInitialized(Grid[,] grids)
+    public Action<Grid[,]> OnGridPositionsChanged;
+    public Action<Grid[,]> OnGridInitialized;
+
+    public void CreateBoard(LevelSettings levelSettings)
     {
-        if (!CheckConnectedTiles(grids))
+        _tileWidth = TileProvider.Instance.GetTileWidth();
+        _tileHeight = TileProvider.Instance.GetTileHeight();
+
+        Grids = new Grid[levelSettings.LevelColumnCount, levelSettings.LevelRowCount];
+
+        for (int i = 0; i < levelSettings.LevelRowCount; i++)
         {
-            ShuffleBoard();
-        }
-    }
-
-    private void OnGridPositionsChanged(Grid[,] grids)
-    {
-        if (!CheckConnectedTiles(grids))
-        {
-            ShuffleBoard();
-        }
-    }
-
-    private bool CheckConnectedTiles(Grid[,] grids)
-    {
-        List<Tile> controlledConnectedTiles = new List<Tile>();
-
-        bool hasConnectedTiles = false;
-
-        foreach (Grid grid in grids)
-        {
-            if (controlledConnectedTiles.Contains(grid.Tile))
+            for (int j = 0; j < levelSettings.LevelColumnCount; j++)
             {
-                continue;
-            }
+                Vector2 gridPosition = new Vector2(j * _tileHeight, i * _tileWidth);
 
-            List<Tile> connectedTiles = grid.Tile.GetConnectedTiles();
+                //Grid Generation
 
-            if (!hasConnectedTiles && connectedTiles.Count >= 2)
-            {
-                hasConnectedTiles = true;
-            }
+                Grid grid = new Grid(j, i, gridPosition);
 
-            controlledConnectedTiles.AddRange(connectedTiles);
+                Grids[j, i] = grid;
 
-            foreach (Tile tile in connectedTiles)
-            {
-                tile.ChangeSprite(connectedTiles.Count);
+                //Tile Generation
+
+                AddTile(j, i);
             }
         }
 
-        return hasConnectedTiles;
+        OnGridInitialized?.Invoke(Grids);
     }
 
-    private void ShuffleBoard()
+    private void AddTile(int column, int row)
     {
-        int lengthRow = BoardGenerator.Instance.Grids.GetLength(1);
+        GameObject go = TileProvider.Instance.GetRandomTile();
 
-        for (int i = BoardGenerator.Instance.Grids.Length - 1; i > 0; i--)
+        Grids[column, row].Tile = go.GetComponent<Tile>();
+
+        go.GetComponent<Tile>().Init(column, row, Grids[column, row].Position);
+    }
+
+    public void AddNewTiles()
+    {
+        foreach (Grid grid in Grids)
         {
-            int i0 = i / lengthRow;
-            int i1 = i % lengthRow;
-
-            int j = Random.Range(0, i + 1);
-
-            int j0 = j / lengthRow;
-            int j1 = j % lengthRow;
-
-            Tile tempTile = BoardGenerator.Instance.Grids[i0, i1].Tile;
-            Vector2 tempPos = BoardGenerator.Instance.Grids[i0, i1].Position;
-            int tempRow = BoardGenerator.Instance.Grids[i0, i1].Row;
-            int tempColumn = BoardGenerator.Instance.Grids[i0, i1].Column;
-
-            BoardGenerator.Instance.Grids[i0, i1].Tile.ChangeGrid(BoardGenerator.Instance.Grids[j0, j1].Column,
-                BoardGenerator.Instance.Grids[j0, j1].Row,
-                BoardGenerator.Instance.Grids[j0, j1].Position
-            );
-            BoardGenerator.Instance.Grids[i0, i1].Tile = BoardGenerator.Instance.Grids[j0, j1].Tile;
-
-            BoardGenerator.Instance.Grids[j0, j1].Tile.ChangeGrid(tempColumn, tempRow, tempPos);
-            BoardGenerator.Instance.Grids[j0, j1].Tile = tempTile;
+            if (grid.Tile == null)
+            {
+                AddTile(grid.Column, grid.Row);
+            }
         }
 
-        Debug.Log("SHUFFLE");
+        OnGridPositionsChanged?.Invoke(Grids);
+    }
 
-        if (!CheckConnectedTiles(BoardGenerator.Instance.Grids))
+    public void MoveTiles()
+    {
+        foreach (Grid grid in Grids)
         {
-            Debug.Log("SHUFFLE AGAIN");
-
-            ShuffleBoard();
+            if (grid.Tile != null && grid.Tile.Bottom == null && grid.Tile.Row != 0)
+            {
+                grid.Tile.MoveBottom();
+            }
         }
     }
 }

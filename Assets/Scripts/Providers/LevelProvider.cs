@@ -7,11 +7,9 @@ using Random = UnityEngine.Random;
 
 public class LevelProvider : Singleton<LevelProvider>
 {
-    [FormerlySerializedAs("_levelSettingsScriptableObject")] [SerializeField]
-    private LevelProviderScriptableObject levelProviderScriptableObject;
-
+    [SerializeField] private LevelProviderScriptableObject _levelProviderScriptableObject;
+    
     private LevelSettings _levelSettings;
-
     public LevelSettings LevelSettings => _levelSettings;
 
     private List<ETile> _tileList = new List<ETile>();
@@ -21,7 +19,7 @@ public class LevelProvider : Singleton<LevelProvider>
     {
         levelSettings = default;
 
-        foreach (LevelSettings settings in levelProviderScriptableObject.LevelSettings)
+        foreach (LevelSettings settings in _levelProviderScriptableObject.LevelSettings)
         {
             if (settings.Level == level)
             {

@@ -9,6 +9,11 @@ public class CameraManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (LevelManager.Instance == null)
+        {
+            return;
+        }
+        
         LevelManager.Instance.OnLevelLoaded -= OnLevelLoaded;
     }
 
