@@ -25,13 +25,9 @@ public class LevelSettings
     [Range(2, 10)] public int LevelRowCount = 2;
     [Range(2, 10)] public int LevelColumnCount = 2;
 
-    public VisualCondition VisualCondition;
-
     [Range(2, 6)] public int NumberOfColors = 2;
 
-    public int MovesCount;
-    
-    public List<Goal> Goals;
+    public VisualCondition VisualCondition;
 }
 
 [CreateAssetMenu(fileName = "LevelSettings", menuName = "LevelSettings/CreateLevelSettings", order = 0)]

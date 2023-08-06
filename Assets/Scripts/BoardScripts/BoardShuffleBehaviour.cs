@@ -95,13 +95,9 @@ public class BoardShuffleBehaviour : MonoBehaviour
             BoardController.Instance.Grids[j0, j1].Tile.ChangeGrid(tempColumn, tempRow, tempPos);
             BoardController.Instance.Grids[j0, j1].Tile = tempTile;
         }
-
-        // Debug.Log("SHUFFLE");
-
+        
         if (!CheckConnectedTiles(BoardController.Instance.Grids))
         {
-            // Debug.Log("SHUFFLE AGAIN");
-
             ShuffleBoard();
         }
     }

@@ -14,12 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelSettings:
   - Level: 1
-    LevelRowCount: 4
-    LevelColumnCount: 4
+    LevelRowCount: 10
+    LevelColumnCount: 10
+    NumberOfColors: 6
     VisualCondition:
       FirstSpriteConditionCount: 4
       SecondSpriteConditionCount: 7
+      ThirdSpiteConditionCount: 9
+  - Level: 2
+    LevelRowCount: 5
+    LevelColumnCount: 8
+    NumberOfColors: 4
+    VisualCondition:
+      FirstSpriteConditionCount: 4
+      SecondSpriteConditionCount: 6
       ThirdSpiteConditionCount: 8
-    NumberOfColors: 6
-    MovesCount: 0
-    Goals: []

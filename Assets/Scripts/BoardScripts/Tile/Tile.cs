@@ -49,13 +49,21 @@ public class Tile : MonoBehaviour
 
     private Tween _moveBottomTween = null;
     
+    private Tween _shuffleTween = null;
+    
     private bool _isShuffling = false;
+
+    private Dictionary<int, Sprite> _conditionsToSprites = new Dictionary<int, Sprite>();
     public void Init(int column, int row, Vector3 position)
     {
         gameObject.name = string.Format("Tile : {0} , {1}", column.ToString(), row.ToString());
 
         Column = column;
         Row = row;
+
+        _conditionsToSprites.Add(LevelProvider.Instance.LevelSettings.VisualCondition.FirstSpriteConditionCount,_firstIcon);
+        _conditionsToSprites.Add(LevelProvider.Instance.LevelSettings.VisualCondition.SecondSpriteConditionCount,_secondIcon);
+        _conditionsToSprites.Add(LevelProvider.Instance.LevelSettings.VisualCondition.ThirdSpiteConditionCount,_thirdIcon);
         _defaultSprite = GetComponent<SpriteRenderer>().sprite;
         
         transform.position = position + 40 * Vector3.up;
@@ -105,12 +113,16 @@ public class Tile : MonoBehaviour
 
         _isShuffling = true;
         
-        transform.DOMove(position, 1f).OnComplete(() =>
+        _shuffleTween?.Kill();
+            
+        _shuffleTween = transform.DOMove(position, 1f).OnComplete(() =>
         {
             _isShuffling = false;
+
+            _shuffleTween = null;
         });
 
-        gameObject.name = string.Format("Tile : {0} , {1} + [SHUFFLE]", column.ToString(), row.ToString());
+        gameObject.name = string.Format("Tile : {0} , {1}", column.ToString(), row.ToString());
     }
 
     private void Destroy()
@@ -171,23 +183,18 @@ public class Tile : MonoBehaviour
 
     public void ChangeSprite(int connectedCount)
     {
-        if (connectedCount >= LevelProvider.Instance.LevelSettings.VisualCondition.FirstSpriteConditionCount
-            && connectedCount < LevelProvider.Instance.LevelSettings.VisualCondition.SecondSpriteConditionCount)
+        Sprite sprite = _defaultSprite;
+        
+        foreach (KeyValuePair<int,Sprite> conditionToSprite in _conditionsToSprites)
         {
-            GetComponent<SpriteRenderer>().sprite = _firstIcon;
+            if (connectedCount > conditionToSprite.Key)
+            {
+                _conditionsToSprites.TryGetValue(conditionToSprite.Key ,out Sprite conditionSprite);
+
+                sprite = conditionSprite;
+            }
         }
-        else if (connectedCount >= LevelProvider.Instance.LevelSettings.VisualCondition.SecondSpriteConditionCount
-                 && connectedCount < LevelProvider.Instance.LevelSettings.VisualCondition.ThirdSpiteConditionCount)
-        {
-            GetComponent<SpriteRenderer>().sprite = _secondIcon;
-        }
-        else if (connectedCount >= LevelProvider.Instance.LevelSettings.VisualCondition.ThirdSpiteConditionCount)
-        {
-            GetComponent<SpriteRenderer>().sprite = _thirdIcon;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().sprite = _defaultSprite;
-        }
+
+        GetComponent<SpriteRenderer>().sprite = sprite;
     }
 }
